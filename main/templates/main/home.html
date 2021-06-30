@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.79.0" />
+    <title>Home | Online Radio</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.0/examples/album/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link href={% static "assets/dist/css/bootstrap.min.css" %} rel="stylesheet" />
+    <link href={% static "assets/style.css" %} rel="stylesheet" />
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Radio</a>
+            <div class="d-flex">
+                <ul class="navbar-nav">
+                  {% if user.is_authenticated %}
+                  <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">{{user.first_name}} {{user.last_name}}</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown04">
+                      <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                    </ul>
+                  </li>
+                  {% else %}
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/register">Registration</a>
+                    </li>
+                  {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </header>
+
+    <main>
+      <section class="py-5 text-center container-fluid" id="streaming">
+        <div class="py-sm-5 d-flex justify-content-center">
+            <iframe
+              frameborder="0"
+              scrolling="no"
+              marginheight="0"
+              marginwidth="0"
+              width="900"
+              height="500"
+              type="text/html"
+              src="https://www.youtube.com/embed/XwuRiIh2IlM?autoplay=0&fs=1&iv_load_policy=1&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=https://youtubeembedcode.com"
+            >
+            </iframe>
+        </div>
+      </section>
+
+      <div class="album py-3 bg-light">
+        <div class="container">
+          <form method="POST">
+          {% csrf_token %}
+            <div class="input-group">
+              <textarea class="form-control" name="body" placeholder="Write Your Content.." rows="3"></textarea>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+              <button type="submit" class="btn btn-primary ">Add Comment</button>
+            </div>
+          </form>
+
+          {% for message in messages%}
+          <div class="d-flex justify-content-end">
+              <i class="fas fa-check"></i> {{message}}   
+          </div> 
+          {% endfor %}
+        </div>
+      </div>
+      <section class="container-fluid pb-5" id="streaming">
+      
+          <div class="container py-3">
+            <h3> Total {{ comments.count }} comments </h3>
+          </div>
+          {% for comment in comments %}
+            <div class="container">
+                <div class="card border-light my-3" id="comment_card">
+                  <div class="card-body text-dark">
+                    <h4 style="margin-bottom: -.2em;"> {{ comment.author.first_name }} {{ comment.author.last_name }} </h4>
+                    <small class="text-muted" style="font-size: .6em;">{{ comment.date }}</small>
+                    <p class="card-text mt-2" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{ comment.content }}</p>
+                    <div class="d-flex">
+                      {% if user.is_authenticated %}
+                      <form method="POST" action={% url 'like_comment' %}>
+                        {% csrf_token %}
+
+                        {% if is_liked %}
+                        <button type="submit" class="btn btn-sm btn-danger" name="comment_id" value="{{ comment.id}}"> Unlike</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-sm btn-primary" name="comment_id" value="{{ comment.id}}"> Like</button>
+                        {% endif %}
+
+                      </form>
+                      {% endif %}
+                 
+                <a type="button" class="btn btn-sm btn-outline-primary mx-2" href="/reply/id={{ comment.id }}">Reply</a></div>
+                      {% for reply in comment.reply_set.all %}
+                        <div class="container">
+                            <div class="card border-light my-2" >
+                              <div class="card-body text-dark">
+                                <h4 style="margin-bottom: -.2em;"> {{ reply.author.first_name }} {{ reply.author.last_name }} </h4>
+                                <small class="text-muted" style="font-size: .6em;">{{ reply.date }}</small>
+                                <p class="card-text mt-2" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{ reply.content }}</p>
+                                <div class="d-flex">
+                                  {% if user.is_authenticated %}
+                                    <form method="POST" action={% url 'like_reply' %}>
+                                      {% csrf_token %}
+
+                                      {% if is_liked %}
+                                      <button type="submit" class="btn btn-sm btn-danger" name="reply_id" value="{{ reply.id}}"> Unlike</button>
+                                      {% else %}
+                                      <button type="submit" class="btn btn-sm btn-primary" name="reply_id" value="{{ reply.id}}"> Like</button>
+                                      {% endif %}
+
+                                    </form>
+                                  {% endif %}
+                                   <a type="button" class="btn btn-sm btn-outline-primary mx-2" href="/reply/id={{ comment.id }}">Reply</a></div>
+                              </div>
+                            </div>     
+                        </div> 
+                      {% endfor %}
+                  </div>
+                </div>     
+            </div> 
+          {% endfor %}
+      
+      </section>
+
+    </main>
+
+    <footer class="text-muted navbar-dark bg-dark py-3">
+      <div class="container text-center">
+        <p class="mb-1">
+          &copy; Peace!
+        </p>
+      </div>
+    </footer>
+
+    <script src={% static "assets/dist/js/bootstrap.bundle.min.js" %}></script>
+  </body>
+</html>

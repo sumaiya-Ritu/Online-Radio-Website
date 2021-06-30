@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.79.0" />
+    <title>User Login | Online Radio</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.0/examples/album/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link href={% static "assets/dist/css/bootstrap.min.css" %} rel="stylesheet" />
+
+  </head>
+
+  <body>
+    <form class="container py-5" method="POST">
+    {% csrf_token %}
+        <div class="form-row d-flex justify-content-center my-5">
+          <div class="col-md-4">
+            <h3 >ACCOUNT<br> REGISTRATION</h3>
+          </div>
+        </div>
+        <div class="form-row d-flex justify-content-center">
+        <div class="col-md-2 mb-3 mx-1">
+          <label for="validationDefault01" >First Name</label>
+          <input type="text" class="form-control" id="validationDefault01" name="firstName" required>
+        </div>
+        <div class="col-md-2 mb-3 mx-1">
+          <label for="validationDefault02" >Last Name</label>
+          <input type="text" class="form-control" id="validationDefault02" name="lastName" required>
+        </div>
+        </div>
+        <div class="form-row d-flex justify-content-center">
+        <div class="col-md-4 mb-3">
+          <label for="validationDefault03" >Email</label>
+          <input type="email" class="form-control" id="validationDefault03" name="email" required>
+        </div>
+        </div>
+        <div class="form-row d-flex justify-content-center">
+        <div class="col-md-4 mb-3">
+          <label for="validationDefault04" >Username</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">@</div>
+            </div>
+            <input type="text" class="form-control" id="validationDefault04" name="username" required>
+          </div>
+        </div>
+        </div>
+        <div class="form-row d-flex justify-content-center">
+            <div class="col-md-4 mb-3">
+                <label for="validationDefault04">Password</label>
+                <input type="password" class="form-control" id="validationDefault04" name="password1" required>
+            </div>
+      </div>
+        <div class="form-row d-flex justify-content-center">
+            <div class="col-md-4 mb-3">
+                <label for="validationDefault05">Confirm Password</label>
+                <input type="password" class="form-control" id="validationDefault05" name="password2" required>
+            </div>
+      </div>    
+      <div class="form-row d-flex justify-content-center">
+            <div class="col-md-4 text-left">
+          <button class="btn btn-dark align-content-center" type="submit">Register</button>
+            </div>
+      </div>
+    </form>
+
+      
+    {% for message in messages%}
+    <div class="container pb-4">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-3">
+          {{message}}        
+        </div>        
+      </div>
+    </div> 
+    {% endfor %}
+
+    <div class="container d-flex justify-content-center">
+      <a href="/">Home</a>
+    </div>
+
+  </body>

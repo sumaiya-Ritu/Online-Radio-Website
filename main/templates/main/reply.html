@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.79.0" />
+    <title>Reply</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.0/examples/album/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link href={% static "assets/dist/css/bootstrap.min.css" %} rel="stylesheet" />
+
+  </head>
+
+  <body>
+    <div class="container text-center my-5">
+      <h4 class="d-flex justify-content-center mb-5"> {{ comment.content }} </h4>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-row d-flex justify-content-center">
+          <div class="col-md-6 mb-1">
+            <textarea class="form-control" name="body" placeholder="Write Your Content.." rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-row d-flex justify-content-center text-center mt-1">
+          <div class="col-md-6 d-flex justify-content-end">
+            <button class="btn btn-dark" type="submit">
+              Make Reply
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {% for message in messages%}
+      <div class="my-2">
+        <div class="form-row d-flex justify-content-center text-center">
+          <div class="col-md-6 d-flex justify-content-end">{{message}}</div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="d-flex justify-content-center mt-5">
+        <a href="/">Home</a>
+      </div>
+
+    </div>
+  </body>
+</html>
